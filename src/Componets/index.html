@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <style>
+
+    </style>
+    <script>
+        function loadFile() {
+            var input, file, fr;
+
+            if (typeof window.FileReader !== 'function') {
+                bodyAppend("p", "The file API isn't supported on this browser yet.");
+                return;
+            }
+
+            input = document.getElementById('fileinput');
+            if (!input) {
+                bodyAppend("p", "Um, couldn't find the fileinput element.");
+            }
+            else if (!input.files) {
+                bodyAppend("p", "This browser doesn't seem to support the `files` property of file inputs.");
+            }
+            else if (!input.files[0]) {
+                bodyAppend("p", "Please select a file before clicking 'Load'");
+            }
+            else {
+                file = input.files[0];
+                fr = new FileReader();
+                fr.onload = receivedText;
+                fr.readAsText(file);
+            }
+
+            function receivedText() {
+                //console.log(fr.result);
+                var doc = parser.parseFromString(fr.result, "text/xml");
+                shownode(doc.childNodes[0]);
+            }
+        }
+
+        function shownode(node) {
+            console.log(node.nodeName);
+            for (var i = 0; i < node.childNodes.length; i++)
+                shownode(node.childNodes[i]);
+        }
+
+        function showResult(fr, label) {
+            var markup, result, n, aByte, byteStr;
+
+            markup = [];
+            result = fr.result;
+            for (n = 0; n < result.length; ++n) {
+                aByte = result.charCodeAt(n);
+                byteStr = aByte.toString(16);
+                if (byteStr.length < 2) {
+                    byteStr = "0" + byteStr;
+                }
+                markup.push(byteStr);
+            }
+            bodyAppend("p", label + " (" + result.length + "):");
+            bodyAppend("pre", markup.join(" "));
+        }
+
+        function bodyAppend(tagName, innerHTML) {
+            var elm;
+
+            elm = document.createElement(tagName);
+            elm.innerHTML = innerHTML;
+            document.body.appendChild(elm);
+        }
+
+
+        if (typeof (DOMParser) == 'undefined') {
+            DOMParser = function () { }
+            DOMParser.prototype.parseFromString = function (str, contentType) {
+                if (typeof (ActiveXObject) != 'undefined') {
+                    var xmldata = new ActiveXObject('MSXML.DomDocument');
+                    xmldata.async = false;
+                    xmldata.loadXML(str);
+                    return xmldata;
+                } else if (typeof (XMLHttpRequest) != 'undefined') {
+                    var xmldata = new XMLHttpRequest;
+                    if (!contentType) {
+                        contentType = 'application/xml';
+                    }
+                    xmldata.open('GET', 'data:' + contentType + ';charset=utf-8,' + encodeURIComponent(str), false);
+                    if (xmldata.overrideMimeType) {
+                        xmldata.overrideMimeType(contentType);
+                    }
+                    xmldata.send(null);
+                    return xmldata.responseXML;
+                }
+            }
+        }
+
+        var xmlString = "<root><thing attr='val'/></root>";
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(xmlString, "text/xml");
+        console.log(doc.childNodes.length);
+    </script>
+</head>
+
+<body>
+    <form action='#' onsubmit="return false;">
+        <input type='file' id='fileinput'>
+        <input type='button' id='btnLoad' value='Load' onclick='loadFile();'>
+    </form>
+
+</body>
+<html>
