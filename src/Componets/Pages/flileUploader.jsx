@@ -22,9 +22,10 @@ function FlileUploader() {
             var xml = new XMLParser().parseFromString(xmldata);    // Assume xmlText contains the example XML
             console.log(xml);
             // console.log(xml.children[0])
-            // var Mcrdata = xml.getElementsByTagName('Mcr')
+            var Mcrdata = xml.getElementsByTagName('Mcr')
             // // console.log(xml.getElementsByTagName('Mcr'));
             // var data_values = Mcrdata[0].children[0].children[0].children
+            console.log("Mcrdata", Mcrdata);
 
             // console.log(Mcrdata[0].children[0].children[0].children);
             // console.log(data_values[0].name);
