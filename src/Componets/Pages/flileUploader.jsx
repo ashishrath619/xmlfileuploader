@@ -1,7 +1,11 @@
 import React, { useState, Fragment } from 'react';
 import axios from 'axios';
 import { Form, Container, Col, Row, Button } from 'react-bootstrap';
+
+import convert from 'xml-js'
+
 var XMLParser = require('react-xml-parser');
+
 
 function FlileUploader() {
     const [selectedFile, setSelectedFile] = useState();
@@ -18,19 +22,15 @@ function FlileUploader() {
         reader.onload = function (event) {
             // The file's text will be printed here
             const xmldata = event.target.result;
-            console.log(event.target.result)
+            console.log(xmldata, "xmldata");
             var xml = new XMLParser().parseFromString(xmldata);    // Assume xmlText contains the example XML
-            console.log(xml);
-            // console.log(xml.children[0])
-            var Mcrdata = xml.getElementsByTagName('Mcr')
-            // // console.log(xml.getElementsByTagName('Mcr'));
-            // var data_values = Mcrdata[0].children[0].children[0].children
-            console.log("Mcrdata", Mcrdata);
-
-            // console.log(Mcrdata[0].children[0].children[0].children);
-            // console.log(data_values[0].name);
-            // console.log(data_values[0].value);
-
+            console.log("xml", xml);
+            var options = { ignoreCdata: false, indentAttributes: false };
+            // var result1 = convert.xml2json(xmldata, options, { compact: true, spaces: 4 });
+            var result3 = convert.xml2js(xmldata, { ignoreDeclaration: true, fullTagEmptyElement: true, compact: true, indentAttributes: false, ignoreAttributes: true, spaces: 4 });
+            var result2 = convert.xml2json(xmldata, { ignoreDeclaration: true, fullTagEmptyElement: true, compact: true, indentAttributes: false, ignoreAttributes: false, spaces: 4 });
+            console.log("result", result2, result3);
+            console.log("sss", result3.Mcr.Rmla)
 
         };
 
