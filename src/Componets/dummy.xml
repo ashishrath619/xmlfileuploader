@@ -18,6 +18,19 @@
 		<ac20_2>3</ac20_2>
 	  </SectionISection>
 	</Rmla>
+	<Rmla stateCode="AZ">
+	  <SectionISection>
+		<ac10_1>200</ac10_1>
+		<ac10_2>15</ac10_2>
+		<ac20_1>400</ac20_1>
+		<ac20_2>5</ac20_2>
+		<ac30_1>1</ac30_1>
+		<ac30_2>1</ac30_2>
+		<ac31_1>1</ac31_1>
+		<ac31_2>1</ac31_2>
+
+	  </SectionISection>
+	</Rmla>
 </Mcr>
 
 

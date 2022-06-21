@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { Switch, Route } from "react-router-dom";
-import FlileUploader from "../Pages/flileUploader";
+import FlileUploader from "../Pages/fileUploader";
 
 export default function RouterConfig() {
   return (

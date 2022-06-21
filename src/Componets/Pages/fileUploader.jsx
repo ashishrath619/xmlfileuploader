@@ -41,8 +41,65 @@ function FlileUploader() {
                 rmla.push(rmlaObj);
                 rmla_data.push(rmlaObj);
             }
-            console.log(JSON.stringify(rmla), "rmla");
 
+            console.log(JSON.stringify(rmla), "rmla");
+            var StateCodeArray = [];
+            var StateCodeArrayIndex = [];
+            var StateCodeAlreadyExists = [];
+
+            //get all status code
+            for(i=0; i< rmla.length; i++){
+                //if (StateCodeArray.indexOf(rmla[i].stateCode) !== -1){
+                    for(j=i+1; j< rmla.length; j++){
+                        if (rmla[i].stateCode==rmla[j].stateCode){
+                            //let children1 = rmla[i].SectionISection;
+                            //let children2 = rmla[j].SectionISection;
+                            console.log("rmla[i].SectionISection", rmla[i].SectionISection, rmla[j].SectionISection);
+
+                            for(var k=0;k<rmla[i].SectionISection.length;k++){
+                                //var current = children1[k];
+                                console.log("rmla[i].SectionISection[k].name", rmla[i].SectionISection[k].name);
+                                for(var l=k+1;l< rmla[j].SectionISection.length;l++){
+                                  if(rmla[i].SectionISection[k].name = rmla[j].SectionISection[l].name){
+                                    rmla[i].SectionISection[k].value = rmla[i].SectionISection[k].value + rmla[j].SectionISection[l].value;
+                                  }
+                                  else {
+                                    rmla[i].SectionISection[k].push(rmla[j].SectionISection[l]);
+                                      //array.splice(l,1);
+                                    l++;
+                                  }
+                                }
+                              }
+
+                            console.log("children1", rmla[i].SectionISection, rmla[j].SectionISection);
+                            return;
+                              
+                            // for (var j = 0; j < children1.length; j++) {
+                            //     console.log(children1[j].name);
+                            //     //rmlaObj.SectionISection[children1[j].name] = children1[j].value;
+                            // }
+                            // for (var j = 0; j < children1.length; j++) {
+                                
+                                //rmlaObj.SectionISection[children1[j].name] = children1[j].value;
+            
+                            //}
+                            //rmla.push(rmlaObj);
+
+
+
+
+                        }
+                    }
+                    //console.log(rmla[i].stateCode, "duplicate");
+
+                //}
+                // else{
+                //     StateCodeArray.push(rmla[i].stateCode);
+                //     StateCodeArrayIndex.push(i);
+                // }
+            }
+
+            console.log("StateCodeArray", StateCodeArray);
             // rmla_data.map((item, index) => {
             //     console.log(item.SectionISection, "item");
             //     const arr1 = Object.keys(item.SectionISection);
