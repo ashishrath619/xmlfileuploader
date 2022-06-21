@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type='text/javascript' src='https://code.jquery.com/jquery-3.5.1.min.js'></script>
+    <script type='text/javascript' src="https://cdn.rawgit.com/abdmob/x2js/master/xml2json.js"></script>
+    <style>
+        body {
+            font-family: monospace;
+        }
+
+        #xmlToJSON {
+            margin-top: 20px;
+            line-height: 25px;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#xmlToJSON").click(function () {
+                var data = $("#xmlString").val();
+                var xmlData = "";
+                if (data !== null && data.trim().length !== 0) {
+                    try {
+                        xmlData = $.parseXML(data);
+                    } catch (e) {
+                        throw e;
+                    }
+                    var x2js = new X2JS();
+                    data = x2js.xml2json(xmlData);
+                    console.log(data);
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <h2>Convert XML to JSON - <a href="https://codepremix.com/" target="_blank" rel="noopener noreferrer">Code
+            Premix</a></h2>
+    <div>
+        <h4>XML:</h4>
+        <textarea id="xmlString" cols="55" rows="15"></textarea>
+    </div>
+    <button id="xmlToJSON" onclick="">Convert XML to JSON</button>
+</body>
+
+</html>
