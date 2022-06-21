@@ -49,7 +49,6 @@ function FlileUploader() {
 
             //get all status code
             for(i=0; i< rmla.length; i++){
-                //if (StateCodeArray.indexOf(rmla[i].stateCode) !== -1){
                     for(j=i+1; j< rmla.length; j++){
                         if (rmla[i].stateCode==rmla[j].stateCode){
                             //let children1 = rmla[i].SectionISection;
