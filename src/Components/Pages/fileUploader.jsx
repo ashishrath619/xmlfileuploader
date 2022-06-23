@@ -53,20 +53,32 @@ function FlileUploader() {
                         if (rmla[i].stateCode==rmla[j].stateCode){
                             //let children1 = rmla[i].SectionISection;
                             //let children2 = rmla[j].SectionISection;
-                            console.log("rmla[i].SectionISection", rmla[i].SectionISection, rmla[j].SectionISection);
+                            console.log("rmla[i].SectionISection[0].keys[0]);", Object.keys(rmla[i].SectionISection));
 
-                            for(var k=0;k<rmla[i].SectionISection.length;k++){
+                            for(var k=0;k<Object.keys(rmla[i].SectionISection).length;k++){
                                 //var current = children1[k];
-                                console.log("rmla[i].SectionISection[k].name", rmla[i].SectionISection[k].name);
-                                for(var l=k+1;l< rmla[j].SectionISection.length;l++){
-                                  if(rmla[i].SectionISection[k].name = rmla[j].SectionISection[l].name){
-                                    rmla[i].SectionISection[k].value = rmla[i].SectionISection[k].value + rmla[j].SectionISection[l].value;
-                                  }
-                                  else {
-                                    rmla[i].SectionISection[k].push(rmla[j].SectionISection[l]);
-                                      //array.splice(l,1);
-                                    l++;
-                                  }
+                                console.log("rmla[i].SectionISection[k].name", Object.keys(rmla[i].SectionISection), Object.values(rmla[i].SectionISection));
+                                for(var l=0;l< Object.keys(rmla[j].SectionISection).length;l++){
+                                    console.log("Object.keys(rmla[i].SectionISection)[l]",Object.keys(rmla[i].SectionISection)[l]);
+                                    console.log("Object.keys(rmla[j].SectionISection)[l]",Object.keys(rmla[j].SectionISection)[l]);
+
+                                    if((Object.keys(rmla[i].SectionISection)[k] = Object.keys(rmla[j].SectionISection)[l])){
+                                        Object.values(rmla[i].SectionISection)[k] = parseInt(Object.values(rmla[i].SectionISection)[k]) + parseInt(Object.values(rmla[j].SectionISection)[l]);
+                                        //rmla[i].SectionISection[k].value + rmla[j].SectionISection[l].value;
+                                        console.log("Object.value(rmla[i].SectionISection)[k] ", Object.values(rmla[i].SectionISection)[k]);
+                                      }
+                                    //   else {
+                                    //     rmla[i].SectionISection[k].push(rmla[j].SectionISection[l]);
+                                    //     l++;
+                                    //   }
+                                //   if((rmla[i].SectionISection)[k].name = rmla[j].SectionISection[l].name){
+                                //     rmla[i].SectionISection[k].value = rmla[i].SectionISection[k].value + rmla[j].SectionISection[l].value;
+                                //   }
+                                //   else {
+                                //     rmla[i].SectionISection[k].push(rmla[j].SectionISection[l]);
+                                //       //array.splice(l,1);
+                                //     l++;
+                                //   }
                                 }
                               }
 
