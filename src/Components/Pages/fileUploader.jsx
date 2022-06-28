@@ -1,5 +1,4 @@
 import React, { useState, Fragment } from 'react';
-import axios from 'axios';
 import { Form, Container, Col, Row, Button } from 'react-bootstrap';
 
 
@@ -13,17 +12,12 @@ function FlileUploader() {
     const changeHandler = (event) => {
         setSelectedFile(event.target.files[0]);
         setIsFilePicked(true);
-        console.log(event, "event");
         var file = event.target.files[0];
-
-
         var reader = new FileReader();
+
         reader.onload = function (event) {
-            // The file's text will be printed here
             const xmldata = event.target.result;
-            console.log(xmldata, "xmldata");
-            var xml = new XMLParser().parseFromString(xmldata);    // Assume xmlText contains the example XML
-            console.log("xml", xml);
+            var xml = new XMLParser().parseFromString(xmldata);   
 
             var Rmla = xml.getElementsByTagName("Rmla");
             var rmla = [];
@@ -33,143 +27,47 @@ function FlileUploader() {
                 rmlaObj.stateCode = Rmla[i].attributes.stateCode;
                 rmlaObj.SectionISection = {};
                 let children1 = Rmla[i].children[0].children;
-                console.log(children1, "children1");
+
                 for (var j = 0; j < children1.length; j++) {
                     rmlaObj.SectionISection[children1[j].name] = children1[j].value;
-
                 }
                 rmla.push(rmlaObj);
                 rmla_data.push(rmlaObj);
             }
 
-            console.log(JSON.stringify(rmla), "rmla");
-            var StateCodeArray = [];
-            var StateCodeArrayIndex = [];
-            var StateCodeAlreadyExists = [];
-
-            //get all status code
             for(i=0; i< rmla.length; i++){
-                    for(j=i+1; j< rmla.length; j++){
-                        if (rmla[i].stateCode==rmla[j].stateCode){
-                            //let children1 = rmla[i].SectionISection;
-                            //let children2 = rmla[j].SectionISection;
-                            console.log("rmla[i].SectionISection[0].keys[0]);", Object.keys(rmla[i].SectionISection));
-
-                            for(var k=0;k<Object.keys(rmla[i].SectionISection).length;k++){
-                                //var current = children1[k];
-                                console.log("rmla[i].SectionISection[k].name", Object.keys(rmla[i].SectionISection), Object.values(rmla[i].SectionISection));
-                                for(var l=0;l< Object.keys(rmla[j].SectionISection).length;l++){
-                                    console.log("Object.keys(rmla[i].SectionISection)[l]",Object.keys(rmla[i].SectionISection)[l]);
-                                    console.log("Object.keys(rmla[j].SectionISection)[l]",Object.keys(rmla[j].SectionISection)[l]);
-
-                                    if((Object.keys(rmla[i].SectionISection)[k] = Object.keys(rmla[j].SectionISection)[l])){
-                                        Object.values(rmla[i].SectionISection)[k] = parseInt(Object.values(rmla[i].SectionISection)[k]) + parseInt(Object.values(rmla[j].SectionISection)[l]);
-                                        //rmla[i].SectionISection[k].value + rmla[j].SectionISection[l].value;
-                                        console.log("Object.value(rmla[i].SectionISection)[k] ", Object.values(rmla[i].SectionISection)[k]);
-                                      }
-                                    //   else {
-                                    //     rmla[i].SectionISection[k].push(rmla[j].SectionISection[l]);
-                                    //     l++;
-                                    //   }
-                                //   if((rmla[i].SectionISection)[k].name = rmla[j].SectionISection[l].name){
-                                //     rmla[i].SectionISection[k].value = rmla[i].SectionISection[k].value + rmla[j].SectionISection[l].value;
-                                //   }
-                                //   else {
-                                //     rmla[i].SectionISection[k].push(rmla[j].SectionISection[l]);
-                                //       //array.splice(l,1);
-                                //     l++;
-                                //   }
+                for(j = i+1; j< rmla.length; j++){
+                    if (rmla[i].stateCode == rmla[j].stateCode){
+                        var matchedStateCodeArray1 = rmla[i].SectionISection;
+                        var matchedStateCodeArray2 = rmla[j].SectionISection;
+                        var combinedArrayData = [matchedStateCodeArray1, matchedStateCodeArray2];
+                        
+                        const addCommonStateCodeData = objSectionISection => {
+                            const combinedArrayResult = {}; 
+                            objSectionISection.forEach(SectionISection => { 
+                                for (let [key, value] of Object.entries(SectionISection)) { 
+                                    if (combinedArrayResult[key]) { 
+                                        combinedArrayResult[key] += parseInt(value);
+                                    } else { 
+                                        combinedArrayResult[key] = parseInt(value);
+                                    }
                                 }
-                              }
+                            });
+                            return combinedArrayResult; 
+                        };
 
-                            console.log("children1", rmla[i].SectionISection, rmla[j].SectionISection);
-                            return;
-                              
-                            // for (var j = 0; j < children1.length; j++) {
-                            //     console.log(children1[j].name);
-                            //     //rmlaObj.SectionISection[children1[j].name] = children1[j].value;
-                            // }
-                            // for (var j = 0; j < children1.length; j++) {
-                                
-                                //rmlaObj.SectionISection[children1[j].name] = children1[j].value;
-            
-                            //}
-                            //rmla.push(rmlaObj);
-
-
-
-
-                        }
+                        const combinedStateData = addCommonStateCodeData(combinedArrayData);
+                        rmla[i].SectionISection = Object.assign({}, combinedStateData); 
+                        rmla.splice(j, 1);   
+                        console.log(rmla);                 
                     }
-                    //console.log(rmla[i].stateCode, "duplicate");
+                }
+        }
 
-                //}
-                // else{
-                //     StateCodeArray.push(rmla[i].stateCode);
-                //     StateCodeArrayIndex.push(i);
-                // }
-            }
-
-            console.log("StateCodeArray", StateCodeArray);
-            // rmla_data.map((item, index) => {
-            //     console.log(item.SectionISection, "item");
-            //     const arr1 = Object.keys(item.SectionISection);
-            //     const arr2 = Object.values(item.SectionISection);
-            //     let arr3 = [...arr2];
-            //     console.log(arr1, ...arr3, "arr1");
-
-            //     var result1 = [];
-            //     arr2.forEach(element => {
-            //         element = + element;
-            //         result1.push(element);
-
-            //     });
-            //     console.log(item.SectionISection, "item");
-            //     console.log(result1, "index");
-            // }
-            // )
-
-
-            // rmla.forEach(element => {
-
-            //     rmla_data.forEach(element2 => {  
-            //         console.log(element2, "element2");
-
-            //         if (element.stateCode === element2.stateCode) {
-            //             // var data2 = [(element.SectionISection)concat(element2.SectionISection)];
-            //             var a = element.SectionISection
-            //             var b = element2.SectionISection;
-            //             var a_Data = [a]
-            //             var b_Data = [b]
-
-            //             let arr3 = a_Data.map((item, i) => Object.assign({}, item, b_Data[i]));
-            //             console.log(arr3, "Object.keys(a).length");
-            //             console.log(a, b, "elementtwo");
-            //             // console.log(element2, "elementtwo");
-
-            //             console.log("sss")
-
-            //         }
-            //     })
-
-
-
-            //     // if (element.stateCode == ){
-            //     //     var xyz = element.SectionISection.ac10_1;
-            //     //     console.log("xyz", xyz);
-            //     // }
-            //     // console.log(element, "element");
-            // });
-            // console.log(rmla.length, "rmla");
-
-
-
+            
         };
 
         var data = reader.readAsText(file);
-
-        console.log("reader", data)
-
     }
 
     const handleSubmission = () => {
