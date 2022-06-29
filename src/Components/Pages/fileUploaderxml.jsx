@@ -112,23 +112,8 @@ function FlileUploader() {
             }
 
 
-            var objval = [{
-                Mcr: "Mcr",
-                attributes: {
-                    name: "ashish",
-                    age: "24"
-                }
-            },
-            {
-                Mcr: "Mr",
-                attributes: {
-                    name: "ashsh",
-                    age: "2"
-                }
-            }
 
-            ]
-            console.log("Obj", objval, data);
+            console.log("Obj", JSON.stringify(data));
             // var newValu = JSON.stringify(data)
             // var xmldata2 = jsonxml({
             //     node: 'text content',
@@ -169,9 +154,13 @@ function FlileUploader() {
             // xml data extract with nodes
             var parserData = xml.getElementsByTagName("Mcr");
             var dataxml = []
+            var nameMcr = parserData[0].name
+            var Mcrattributes = parserData[0].attributes
 
             for (var i = 0; i < parserData.length; i++) {
                 var parserDataElement = parserData[i].getElementsByTagName("Rmla");
+                var dataxmlElement = parserDataElement;
+                console.log("dataxmlElement", parserDataElement)
 
                 // for (var j = 0; j < children1.length; j++) {
                 //     var children2 = children1[j].getElementsByTagName("children");
@@ -182,7 +171,62 @@ function FlileUploader() {
                 // }
             }
 
-            console.log("sss", parserData, parserDataElement)
+            var objval = {
+                "Mcr": {
+                    "-type": "E",
+                    "-year": "2022",
+                    "-periodType": "MCRQ1",
+                    "-formVersion": "v5",
+                    "Rmla": [
+                        {
+                            "-stateCode": "AZ",
+                            "SectionISection": {
+                                "ac10_1": "100",
+                                "ac10_2": "5",
+                                "ac20_1": "200",
+                                "ac20_2": "300",
+                                "ac30_1": "10",
+                                "ac30_2": "90"
+                            }
+                        },
+                        {
+                            "-stateCode": "CA",
+                            "SectionISection": {
+                                "ac10_1": "100",
+                                "ac10_2": "5",
+                                "ac20_1": "200",
+                                "ac20_2": "3"
+                            }
+                        }
+                    ]
+                }
+            }
+
+            var dataObject = [];
+            var propdata = {}
+
+
+            propdata.Mcr = "mct"
+
+
+            const newObjjson = {
+                Mcr: {
+                    ...Mcrattributes,
+                    // Object.assign({Mcrattributes}),
+                    "Rmla":
+                        data
+                }
+
+
+
+
+
+            }
+            var t = dataObject.push({ name: "ashish" })
+
+            exportFromJSON({ data: newObjjson, fileName, exportType })
+
+            console.log("objval", newObjjson, JSON.stringify(Mcrattributes))
 
 
 
