@@ -1,5 +1,7 @@
 import React, { useState, Fragment } from "react";
 import { Form, Container, Col, Row, Button } from "react-bootstrap";
+import { saveAs } from "file-saver";
+
 var jsonxml = require('jsontoxml');
 var convert = require('xml-js');
 var js2xmlparser = require("js2xmlparser");
@@ -41,13 +43,16 @@ function FlileUploader() {
             for (var i = 0; i < Rmla.length; i++) {
                 var rmlaObj = {};
                 rmlaObj.stateCode = Rmla[i].attributes.stateCode;
+
                 rmlaObj.SectionISection = {};
                 let children1 = Rmla[i].children[0].children;
                 // console.log(children1, "children1");
                 for (var j = 0; j < children1.length; j++) {
                     rmlaObj.SectionISection[children1[j].name] = children1[j].value;
                 }
+
                 rmla.push(rmlaObj);
+                // rmla.setAttribute("stateCode", Rmla[i].attributes.stateCode);
             }
             console.log("rmla1", rmla);
             setData1(rmla);
@@ -67,6 +72,7 @@ function FlileUploader() {
                 rmlaObj.stateCode = Rmla[i].attributes.stateCode;
                 rmlaObj.SectionISection = {};
                 let children1 = Rmla[i].children[0].children;
+                console.log(Rmla, "Rmla2");
                 //console.log(children1, "children1");
                 for (var j = 0; j < children1.length; j++) {
                     rmlaObj.SectionISection[children1[j].name] = children1[j].value;
@@ -150,6 +156,7 @@ function FlileUploader() {
             }
             console.log("xml", xml);
 
+
             // convert xmlparser data into json object
             // xml data extract with nodes
             var parserData = xml.getElementsByTagName("Mcr");
@@ -172,7 +179,9 @@ function FlileUploader() {
             }
 
             var objval = {
-                "Mcr": {
+
+                "Mcr":
+                {
                     "-type": "E",
                     "-year": "2022",
                     "-periodType": "MCRQ1",
@@ -199,6 +208,7 @@ function FlileUploader() {
                             }
                         }
                     ]
+
                 }
             }
 
@@ -212,9 +222,9 @@ function FlileUploader() {
             const newObjjson = {
                 Mcr: {
                     ...Mcrattributes,
-                    // Object.assign({Mcrattributes}),
                     "Rmla":
                         data
+
                 }
 
 
@@ -222,14 +232,49 @@ function FlileUploader() {
 
 
             }
-            var t = dataObject.push({ name: "ashish" })
+            console.log("Mcrattributes", Object.keys(Mcrattributes))
+
+
+
+
+            console.log("Mcrattributes...", Mcrattributes)
+
+
+
+
+
+
+
+
+            console.log(Mcrattributes, "ObjMcrattributes");
+            console.log("jsonObj", JSON.stringify(newObjjson))
+
+            // add "-" before every keys and values will unchanged
+
+
+
+
+
 
             exportFromJSON({ data: newObjjson, fileName, exportType })
 
-            console.log("objval", newObjjson, JSON.stringify(Mcrattributes))
+            // console.log("objval", newObjjson, JSON.stringify(newObjjson))
+
+            // var result = convert.js2xml(newObjjson);
+
+            // to convert javascript object to xml text
+            // var json = require('fs').readFileSync(newObjjson, 'utf8');
+            // var options = { compact: true, ignoreComment: true, spaces: 4 };
+            // var result = convert.json2xml(newObjjson, options);
+            // console.log(result);
+            var xmljss = jsonxml(newObjjson)
 
 
 
+            var blob = new Blob([xmljss], { type: "text/plain;charset=utf-8" });
+            saveAs(blob, "xmlfile.txt");
+
+            console.log(xmljss);
 
 
 
