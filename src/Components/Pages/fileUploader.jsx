@@ -10,14 +10,15 @@ function FlileUploader() {
     const [isFilePicked, setIsFilePicked] = useState(false);
 
     const changeHandler = (event) => {
-        setSelectedFile(event.target.files[0]);
-        setIsFilePicked(true);
+        // setSelectedFile(event.target.files[0]);
+        // setIsFilePicked(true);
+        console.log(event.target.result)
         var file = event.target.files[0];
         var reader = new FileReader();
 
         reader.onload = function (event) {
             const xmldata = event.target.result;
-            var xml = new XMLParser().parseFromString(xmldata);   
+            var xml = new XMLParser().parseFromString(xmldata);
 
             var Rmla = xml.getElementsByTagName("Rmla");
             var rmla = [];
@@ -35,36 +36,36 @@ function FlileUploader() {
                 rmla_data.push(rmlaObj);
             }
 
-            for(i=0; i< rmla.length; i++){
-                for(j = i+1; j< rmla.length; j++){
-                    if (rmla[i].stateCode == rmla[j].stateCode){
+            for (i = 0; i < rmla.length; i++) {
+                for (j = i + 1; j < rmla.length; j++) {
+                    if (rmla[i].stateCode == rmla[j].stateCode) {
                         var matchedStateCodeArray1 = rmla[i].SectionISection;
                         var matchedStateCodeArray2 = rmla[j].SectionISection;
                         var combinedArrayData = [matchedStateCodeArray1, matchedStateCodeArray2];
-                        
+
                         const addCommonStateCodeData = objSectionISection => {
-                            const combinedArrayResult = {}; 
-                            objSectionISection.forEach(SectionISection => { 
-                                for (let [key, value] of Object.entries(SectionISection)) { 
-                                    if (combinedArrayResult[key]) { 
+                            const combinedArrayResult = {};
+                            objSectionISection.forEach(SectionISection => {
+                                for (let [key, value] of Object.entries(SectionISection)) {
+                                    if (combinedArrayResult[key]) {
                                         combinedArrayResult[key] += parseInt(value);
-                                    } else { 
+                                    } else {
                                         combinedArrayResult[key] = parseInt(value);
                                     }
                                 }
                             });
-                            return combinedArrayResult; 
+                            return combinedArrayResult;
                         };
 
                         const combinedStateData = addCommonStateCodeData(combinedArrayData);
-                        rmla[i].SectionISection = Object.assign({}, combinedStateData); 
-                        rmla.splice(j, 1);   
-                        console.log(rmla);                 
+                        rmla[i].SectionISection = Object.assign({}, combinedStateData);
+                        rmla.splice(j, 1);
+                        console.log(rmla);
                     }
                 }
-        }
+            }
 
-            
+
         };
 
         var data = reader.readAsText(file);
@@ -80,7 +81,7 @@ function FlileUploader() {
                     <Col>
 
                         <Form.Group controlId="formFile" className="mb-3">
-                            <Form.Label>Select file one</Form.Label>
+                            <Form.Label>Select file </Form.Label>
                             <Form.Control type="file" onChange={changeHandler} />
                         </Form.Group>
 
@@ -101,30 +102,7 @@ function FlileUploader() {
                             <Button onClick={handleSubmission}>Submit</Button>
                         </div>
                     </Col>
-                    {/* <Col>
 
-                        <Form.Group controlId="formFile" className="mb-3">
-                            <Form.Label>Select file two</Form.Label>
-                            <Form.Control type="file" onChange={changeHandler} />
-                        </Form.Group>
-
-                        {isFilePicked ? (
-                            <div>
-                                <p>Filename: {selectedFile.name}</p>
-                                <p>Filetype: {selectedFile.type}</p>
-                                <p>Size in bytes: {selectedFile.size}</p>
-                                <p>
-                                    lastModifiedDate:{' '}
-                                    {selectedFile.lastModifiedDate.toLocaleDateString()}
-                                </p>
-                            </div>
-                        ) : (
-                            <p>Select a file to show details</p>
-                        )}
-                        <div>
-                            <Button onClick={handleSubmission}>Submit</Button>
-                        </div>
-                    </Col> */}
                 </Row>
             </Container>
             {/* <input type="file" name="file"  /> */}
